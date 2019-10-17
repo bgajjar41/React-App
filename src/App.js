@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 // import logo from './logo.svg';
+import Form from './Form.js';
 import './App.css';
 
 const columns = [
@@ -62,6 +63,9 @@ class App extends React.Component {
       paginationPerPage = {5}
       />
       <ContactForm />
+
+      <h2>React Form Validation Demo</h2>
+      <Form />
       </React.Fragment>
     );
   }
