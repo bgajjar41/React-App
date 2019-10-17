@@ -6,3 +6,7 @@
 h2{
 	text-align: center;
 }
+.formErrors p{
+	color: red;
+	text-transform: capitalize;
+}

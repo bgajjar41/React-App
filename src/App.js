@@ -61,6 +61,7 @@ class App extends React.Component {
       data={this.state.contacts}
       pagination = {true}
       paginationPerPage = {5}
+      striped
       />
       <ContactForm />
 
@@ -78,40 +79,64 @@ class ContactForm extends React.Component {
     country: '',
     city: '',
     job: '',
+    f_error: '',
 
   }
 
   handleFormSubmit( event ) {
     event.preventDefault();
 
+    let name = this.state.name;
+    let email = this.state.email;
+    let city = this.state.city;
+    let country = this.state.country;
+    let job = this.state.job;
 
-    let formData = new FormData();
-    formData.append('name', this.state.name)
-    formData.append('email', this.state.email)
-    formData.append('city', this.state.city)
-    formData.append('country', this.state.country)
-    formData.append('job', this.state.job)
+    if(name === ''){
+      this.setState({f_error: 'Name can not be blank'});
+    } else if(email === ''){
+      this.setState({f_error: 'Email can not be blank'});
+    } else if(!email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
+      this.setState({f_error: 'Email is invalid'});
+    } else if(city === ''){
+      this.setState({f_error: 'City can not be blank'});
+    } else if(country === ''){
+      this.setState({f_error: 'Country can not be blank'});
+    } else if(job === ''){
+      this.setState({f_error: 'Job can not be blank'});
+    } else{
 
-    axios({
-      method: 'post',
-      url: 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php',
-      data: formData,
-      config: { headers: {'Content-Type': 'multipart/form-data' }}
-    })
-    .then(function (response) {
-      //handle success
-      console.log(response)
+      this.setState({f_error: ''});
 
-    })
-    .catch(function (response) {
-      //handle error
-      console.log(response)
-    });
+      let formData = new FormData();
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('city', city)
+      formData.append('country', country)
+      formData.append('job', job)
+
+      axios({
+        method: 'post',
+        url: 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php',
+        data: formData,
+        config: { headers: {'Content-Type': 'multipart/form-data' }}
+      })
+      .then(function (response) {
+        //handle success
+        console.log(response)
+
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response)
+      });
+    }
   }
 
   render(){
     return (
       <form>
+      <p className="error">{this.state.f_error}</p>
       <label>Name</label>
       <input type="text" name="name" value={this.state.name}
       onChange={e => this.setState({ name: e.target.value })}/>
