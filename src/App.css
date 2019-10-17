@@ -23,10 +23,13 @@
 
 form{
   padding: 20px;
-  
+
 }
 label{
   min-width: 80px;
   display: inline-block;
   margin-bottom: 10px;
+}
+p.error{
+  color: red;
 }
