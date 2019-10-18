@@ -40,6 +40,11 @@ const columns = [
 
 class App extends React.Component {
 
+  constructor () {
+    super();
+    this.handleStateChange = this.handleStateChange.bind(this);
+  }
+
   componentDidMount() {
     this.get_data();
   }
@@ -50,6 +55,13 @@ class App extends React.Component {
       this.setState({ contacts: data })
       console.log(this.state.contacts)
     })
+  }
+
+  handleStateChange(value){
+    // event.preventDefault();
+    let contacts = this.state.contacts;
+    contacts.unshift(value);
+    this.setState({ contacts : contacts })
   }
 
   handleChange = (state) => {
@@ -64,17 +76,26 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-      <DataTable
-      title="Contact Details"
-      columns={columns}
-      data={this.state.contacts}
-      pagination = {true}
-      paginationPerPage = {5}
-      selectableRows
-      onRowSelected={this.handleChange}
-      striped
-      />
-      <ContactForm />
+      <table border='1' width='100%' >
+      <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Country</th>
+      <th>City</th>
+      <th>Job</th>
+      </tr>
+      {this.state.contacts.map((contact) => (
+        <tr>
+        <td>{ contact.name }</td>
+        <td>{ contact.email }</td>
+        <td>{ contact.country }</td>
+        <td>{ contact.city }</td>
+        <td>{ contact.job }</td>
+        </tr>
+      ))}
+      </table>
+       // <DataTable title="Contact Details" columns={columns} data={this.state.contacts} pagination = {true} paginationPerPage = {5} selectableRows onRowSelected={this.handleChange} striped />
+      <ContactForm handleStateChange = {this.handleStateChange}/>
 
       <h2>React Form Validation Demo</h2>
       <Form />
@@ -125,6 +146,8 @@ class ContactForm extends React.Component {
       formData.append('country', country)
       formData.append('job', job)
 
+
+
       // axios({
       //   method: 'post',
       //   url: 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php',
@@ -144,7 +167,13 @@ class ContactForm extends React.Component {
       axios.post('https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php', formData)
       .then((res) => {
         console.log(res.data);
-        this.setState({ contacts:res.data });
+
+        var contact = {};
+        formData.forEach(function(value, key){
+          contact[key] = value;
+        });
+        this.props.handleStateChange(contact);
+
       });
     }
   }
