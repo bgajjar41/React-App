@@ -41,6 +41,9 @@ const columns = [
 class App extends React.Component {
 
   componentDidMount() {
+    this.get_data();
+  }
+  get_data() {
     const url = 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php'
     axios.get(url).then(response => response.data)
     .then((data) => {
@@ -48,6 +51,12 @@ class App extends React.Component {
       console.log(this.state.contacts)
     })
   }
+
+  handleChange = (state) => {
+    // You can use setState or dispatch with something like Redux so we can use the retrieved data
+    this.setState({ selectedRows: state.selectedRows });
+    console.log(this.state);
+  };
 
   state = {
     contacts: []
@@ -61,6 +70,8 @@ class App extends React.Component {
       data={this.state.contacts}
       pagination = {true}
       paginationPerPage = {5}
+      selectableRows
+      onRowSelected={this.handleChange}
       striped
       />
       <ContactForm />
@@ -80,7 +91,6 @@ class ContactForm extends React.Component {
     city: '',
     job: '',
     f_error: '',
-
   }
 
   handleFormSubmit( event ) {
@@ -115,20 +125,26 @@ class ContactForm extends React.Component {
       formData.append('country', country)
       formData.append('job', job)
 
-      axios({
-        method: 'post',
-        url: 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php',
-        data: formData,
-        config: { headers: {'Content-Type': 'multipart/form-data' }}
-      })
-      .then(function (response) {
-        //handle success
-        console.log(response)
+      // axios({
+      //   method: 'post',
+      //   url: 'https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php',
+      //   data: formData,
+      //   config: { headers: {'Content-Type': 'multipart/form-data' }}
+      // })
+      // .then(function (response) {
+      //   //handle success
+      //   console.log(response)
+      //   window.location.reload();
+      // })
+      // .catch(function (response) {
+      //   //handle error
+      //   console.log(response)
+      // });
 
-      })
-      .catch(function (response) {
-        //handle error
-        console.log(response)
+      axios.post('https://logieagle.in/testlab/php-react-rest-api-crud/api/contacts.php', formData)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ contacts:res.data });
       });
     }
   }
