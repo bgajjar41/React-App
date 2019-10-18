@@ -33,3 +33,9 @@ label{
 p.error{
   color: red;
 }
+table{
+  height: 185px;
+  overflow: auto;
+  display: block;
+  width: 800px;
+}
