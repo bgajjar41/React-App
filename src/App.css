@@ -39,3 +39,10 @@ table{
   display: block;
   width: 800px;
 }
+
+.cursorEdit{
+	cursor: pointer
+}
+.cursorEdit:hover {
+	color: red
+}
